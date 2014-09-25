@@ -5,6 +5,7 @@
  */
 object Main {
 
+
   def balance(chars: List[Char]): Boolean = {
     var openCount = 0
     var closeCount = 0
@@ -64,8 +65,8 @@ object Main {
    */
   def pascal(c: Int, r: Int): Int = {
     if (c < 0 || r < 0) 0
-    if (c > r) 0
-    if (c == 0 || r == c) 1
+    else if (c > r) 0
+    else if (c == 0 || r == c) 1
     else pascal(c - 1, r - 1) + pascal(c, r - 1)
   }
 
