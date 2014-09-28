@@ -20,6 +20,7 @@ object Main {
 
         if (current == '(') openCount = openCount + 1
         else if (current == ')') {
+          if(openCount -1 != closeCount) return false
           closeCount = closeCount + 1
           if (closeCount > openCount) false
         }
@@ -31,34 +32,38 @@ object Main {
   }
 
   def countChange(money: Int, coins: List[Int]): Int = {
-    if (coins == null) return 0
-    if (coins.isEmpty) return 0
-    if (money == 0) return 0
-    val uniqueCoins = coins.distinct
-    var combination = 0
+    if (coins == null || coins.isEmpty || money == 0) return 0
+    var uniqueCoins = coins.distinct.filter(_ <= money).sortWith(_ > _)
 
-    def checkDiv(main: Int, rest: List[Int]) {
-      if (rest == null) return
-      if (rest.isEmpty) return
-      if (money == 0) return
 
-      if(main==0 && rest.size > 1 && rest(1) != 0) checkDiv(rest(1), rest.tail)
+    def combinationsWithCoin(money: Int, main: Int, rest: List[Int]): Int = {
+      var cmb = 0
+      if (main > money) return 0
 
-      val mod: Int = money % main
-      if (mod == 0) combination = combination + 1
-
-      for (coin <- rest) {
-        if (mod!= 0 && coin % mod == 0) combination = combination + 1
-        else if (rest(1) != 0) checkDiv(rest(1), rest.tail)
+      for (i <- money / main to 1 by -1) {
+        if (money - (i * main) == 0) {
+          cmb = cmb + 1
+        }
+        else if (rest.nonEmpty) {
+          cmb = cmb + combinationsWithCoin(money - (main * i), rest.head, rest.tail)
+        }
       }
+      if (rest.nonEmpty)
+        cmb + combinationsWithCoin(money, rest.head, rest.tail)
+      else cmb
     }
 
-    uniqueCoins.foreach(checkDiv(_, uniqueCoins.tail))
-    combination
+    val head: Int = uniqueCoins.head
+    val tail: List[Int] = uniqueCoins.tail
+    if (head == money) {
+      uniqueCoins = tail
+      1 + combinationsWithCoin(money, tail.head, tail.tail)
+    } else {
+      combinationsWithCoin(money, head, tail)
+    }
   }
 
   /**
-   *
    * @param c column
    * @param r row
    * @return summ for the cell of pascal triangle
