@@ -1,11 +1,23 @@
 /**
- * Healthland © scala1 2014
- * All rights reserved
- * Created by Artem Stolpovski on 22.09.2014.
+ * Class created by: Artem Stolpovski
+ * Copyright 2014
  */
+
 object Main {
-
-
+  /**
+   * Write a recursive function which verifies the balancing of parentheses in a string,
+   * which we represent as a List[Char] not a String. For example, the function should return
+   * true for the following strings:
+   * (if (zero? x) max (/ 1 x))
+   * I told him (that it’s not (yet) done). (But he wasn’t listening)
+   * The function should return false for the following strings:
+   * :-)
+   * ())(
+   * The last example shows that it’s not enough to verify that a string contains
+   * the same number of opening and closing parentheses.
+   * @param chars
+   * @return
+   */
   def balance(chars: List[Char]): Boolean = {
     var openCount = 0
     var closeCount = 0
@@ -20,7 +32,7 @@ object Main {
 
         if (current == '(') openCount = openCount + 1
         else if (current == ')') {
-          if(openCount -1 != closeCount) return false
+          if (openCount - 1 != closeCount) return false
           closeCount = closeCount + 1
           if (closeCount > openCount) false
         }
@@ -31,6 +43,18 @@ object Main {
     process(chars)
   }
 
+  /**
+   * Write a recursive function that counts how many different ways you can make change
+   * for an amount, given a list of coin denominations. For example, there are 3 ways
+   * to give change for 4 if you have coins with denomiation 1 and 2: 1+1+1+1, 1+1+2, 2+2.
+   *
+   * Do this exercise by implementing the countChange function in Main.scala.
+   * This function takes an amount to change, and a list of unique denominations
+   * for the coins. Its signature is as follows:
+   * @param money
+   * @param coins
+   * @return
+   */
   def countChange(money: Int, coins: List[Int]): Int = {
     if (coins == null || coins.isEmpty || money == 0) return 0
     var uniqueCoins = coins.distinct.filter(_ <= money).sortWith(_ > _)
@@ -64,6 +88,17 @@ object Main {
   }
 
   /**
+   * The following pattern of numbers is called Pascal’s triangle.
+   *     1
+   *    1 1
+   *   1 2 1
+   *  1 3 3 1
+   * 1 4 6 4 1
+   *    ...
+   * The numbers at the edge of the triangle are all 1, and
+   * each number inside the triangle is the sum
+   * of the two numbers above it. Write a function that computes
+   * the elements of Pascal’s triangle by means of a recursive process.
    * @param c column
    * @param r row
    * @return summ for the cell of pascal triangle
